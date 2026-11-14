@@ -1,0 +1,30 @@
+{
+  "release": "v1.0.1",
+  "date": "2026-11-14",
+  "tested_source_commit": "a94bce5d91fcbd137ddaf1504b83f471da0944c4",
+  "clean_clone_python": "3.12.15",
+  "installation": "uv sync --frozen --all-extras --no-editable",
+  "import_from_site_packages": true,
+  "tests": 61,
+  "failures": 0,
+  "coverage": 0.9801,
+  "docker_platform": "linux/arm64",
+  "docker_user": "10001:10001",
+  "smoke_report": "v1.0.1-smoke.json",
+  "ui_report": "v1.0.1-ui.json",
+  "model_version": "sha256:980a2716ff90e0a46c198ea9462a3730575330dca6282eb1f277685e82d96404",
+  "model_artifact_unchanged": true,
+  "training_reused_from": "5ef327277421fb855e3079ae10487e56dcfe6d8e",
+  "checks": {
+    "empty_input": true,
+    "short_input": true,
+    "html_input": true,
+    "no_http_for_invalid_ui_input": true,
+    "network_error": true,
+    "timeout": true,
+    "http_422_429_5xx": true,
+    "invalid_response": true,
+    "successful_ui_request_to_container": true,
+    "api_app_version": true
+  }
+}
