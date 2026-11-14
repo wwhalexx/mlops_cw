@@ -1,0 +1,12 @@
+**
+!Dockerfile
+!pyproject.toml
+!uv.lock
+!config.toml
+!src/
+!src/toxic_mlops/
+!src/toxic_mlops/*.py
+!artifacts/
+!artifacts/model/
+!artifacts/model/model.joblib
+!artifacts/model/metadata.json

@@ -1,0 +1,369 @@
+{
+  "code": {
+    "commit_sha": "5ef327277421fb855e3079ae10487e56dcfe6d8e",
+    "source_sha256": "2beac0be86d4aa0c834d82c1b7c53a60f6ed72bb6f36b69c7b059667e0ef5ef1"
+  },
+  "data": {
+    "source": "https://www.kaggle.com/datasets/blackmoon/russian-language-toxic-comments",
+    "raw_sha256": "25e75c5b98b82bff4c4f987f452c7eea9735b83744b43bbd31187c3fc792e18b",
+    "raw_rows": 14412,
+    "after_length": 14412,
+    "conflict_rows": 86,
+    "clean_rows": 14112,
+    "positive_rows": 4700,
+    "split_sha256": "d58be4ac87d0925ab677f4f097808a9d957d6c520f488297f56f5471d860f10e",
+    "versions": {
+      "v1": {
+        "sha256": "47f06680d8cac610abe925ba492e20377df0c6abd2f917fdd49306a96bb6c2eb",
+        "rows": 14112
+      },
+      "v2": {
+        "sha256": "f9b017db1fd4ee7f6dab28330b5cc9ebe7c889f0cd3c7121286aa52b5135f4d1",
+        "rows": 14112
+      }
+    },
+    "splits": {
+      "test": {
+        "size": 2116,
+        "sum": 720,
+        "mean": 0.34026465028355385
+      },
+      "train": {
+        "size": 9879,
+        "sum": 3264,
+        "mean": 0.330397813543881
+      },
+      "validation": {
+        "size": 2117,
+        "sum": 716,
+        "mean": 0.3382144544166273
+      }
+    },
+    "protocol": {
+      "seed": 42,
+      "min_chars": 15,
+      "split_folds": 20,
+      "test_folds": 3,
+      "validation_folds": 3,
+      "near_threshold": 0.95,
+      "near_min_chars": 40
+    }
+  },
+  "experiments": [
+    {
+      "name": "v1-word-c1",
+      "run_id": "6b97e3b7731743beb74bd112f4d4826c",
+      "experiment_id": "1",
+      "parameters": {
+        "name": "v1-word-c1",
+        "preprocessing": "v1",
+        "analyzer": "word",
+        "ngram_min": 1,
+        "ngram_max": 2,
+        "c": 1.0,
+        "seed": 42,
+        "class_weight": "balanced",
+        "solver": "liblinear",
+        "min_df": 2,
+        "max_features": 100000,
+        "max_iter": 2000,
+        "sublinear_tf": true,
+        "threshold": 0.5,
+        "raw_sha256": "25e75c5b98b82bff4c4f987f452c7eea9735b83744b43bbd31187c3fc792e18b",
+        "data_sha256": "47f06680d8cac610abe925ba492e20377df0c6abd2f917fdd49306a96bb6c2eb",
+        "split_sha256": "d58be4ac87d0925ab677f4f097808a9d957d6c520f488297f56f5471d860f10e"
+      },
+      "validation": {
+        "f1": 0.7612259444048468,
+        "precision": 0.777292576419214,
+        "recall": 0.7458100558659218,
+        "accuracy": 0.8417572035899858,
+        "average_precision": 0.8055018592862994,
+        "roc_auc": 0.8944802993871097
+      },
+      "fit_seconds": 0.7109825420193374,
+      "commit_sha": "5ef327277421fb855e3079ae10487e56dcfe6d8e",
+      "source_sha256": "2beac0be86d4aa0c834d82c1b7c53a60f6ed72bb6f36b69c7b059667e0ef5ef1"
+    },
+    {
+      "name": "v1-char-c1",
+      "run_id": "e1311c58c52a498db9a2e91b2366527c",
+      "experiment_id": "1",
+      "parameters": {
+        "name": "v1-char-c1",
+        "preprocessing": "v1",
+        "analyzer": "char_wb",
+        "ngram_min": 3,
+        "ngram_max": 5,
+        "c": 1.0,
+        "seed": 42,
+        "class_weight": "balanced",
+        "solver": "liblinear",
+        "min_df": 2,
+        "max_features": 100000,
+        "max_iter": 2000,
+        "sublinear_tf": true,
+        "threshold": 0.5,
+        "raw_sha256": "25e75c5b98b82bff4c4f987f452c7eea9735b83744b43bbd31187c3fc792e18b",
+        "data_sha256": "47f06680d8cac610abe925ba492e20377df0c6abd2f917fdd49306a96bb6c2eb",
+        "split_sha256": "d58be4ac87d0925ab677f4f097808a9d957d6c520f488297f56f5471d860f10e"
+      },
+      "validation": {
+        "f1": 0.8482328482328483,
+        "precision": 0.8418156808803301,
+        "recall": 0.8547486033519553,
+        "accuracy": 0.896551724137931,
+        "average_precision": 0.902977086485471,
+        "roc_auc": 0.9487477021600692
+      },
+      "fit_seconds": 1.7581990420003422,
+      "commit_sha": "5ef327277421fb855e3079ae10487e56dcfe6d8e",
+      "source_sha256": "2beac0be86d4aa0c834d82c1b7c53a60f6ed72bb6f36b69c7b059667e0ef5ef1"
+    },
+    {
+      "name": "v1-char-c10",
+      "run_id": "7024d73c95714a0692da5506dcdb748b",
+      "experiment_id": "1",
+      "parameters": {
+        "name": "v1-char-c10",
+        "preprocessing": "v1",
+        "analyzer": "char_wb",
+        "ngram_min": 3,
+        "ngram_max": 5,
+        "c": 10.0,
+        "seed": 42,
+        "class_weight": "balanced",
+        "solver": "liblinear",
+        "min_df": 2,
+        "max_features": 100000,
+        "max_iter": 2000,
+        "sublinear_tf": true,
+        "threshold": 0.5,
+        "raw_sha256": "25e75c5b98b82bff4c4f987f452c7eea9735b83744b43bbd31187c3fc792e18b",
+        "data_sha256": "47f06680d8cac610abe925ba492e20377df0c6abd2f917fdd49306a96bb6c2eb",
+        "split_sha256": "d58be4ac87d0925ab677f4f097808a9d957d6c520f488297f56f5471d860f10e"
+      },
+      "validation": {
+        "f1": 0.8413597733711048,
+        "precision": 0.853448275862069,
+        "recall": 0.8296089385474861,
+        "accuracy": 0.894189891355692,
+        "average_precision": 0.9158336199125581,
+        "roc_auc": 0.9561386718983647
+      },
+      "fit_seconds": 1.9019692079746164,
+      "commit_sha": "5ef327277421fb855e3079ae10487e56dcfe6d8e",
+      "source_sha256": "2beac0be86d4aa0c834d82c1b7c53a60f6ed72bb6f36b69c7b059667e0ef5ef1"
+    },
+    {
+      "name": "v2-word-c1",
+      "run_id": "6591d8fcb2b14d15a9a4c3d95f73c823",
+      "experiment_id": "1",
+      "parameters": {
+        "name": "v2-word-c1",
+        "preprocessing": "v2",
+        "analyzer": "word",
+        "ngram_min": 1,
+        "ngram_max": 2,
+        "c": 1.0,
+        "seed": 42,
+        "class_weight": "balanced",
+        "solver": "liblinear",
+        "min_df": 2,
+        "max_features": 100000,
+        "max_iter": 2000,
+        "sublinear_tf": true,
+        "threshold": 0.5,
+        "raw_sha256": "25e75c5b98b82bff4c4f987f452c7eea9735b83744b43bbd31187c3fc792e18b",
+        "data_sha256": "f9b017db1fd4ee7f6dab28330b5cc9ebe7c889f0cd3c7121286aa52b5135f4d1",
+        "split_sha256": "d58be4ac87d0925ab677f4f097808a9d957d6c520f488297f56f5471d860f10e"
+      },
+      "validation": {
+        "f1": 0.7594575303354747,
+        "precision": 0.7766423357664234,
+        "recall": 0.7430167597765364,
+        "accuracy": 0.8408124704770902,
+        "average_precision": 0.806283704858461,
+        "roc_auc": 0.8945341316457917
+      },
+      "fit_seconds": 0.7750672079855576,
+      "commit_sha": "5ef327277421fb855e3079ae10487e56dcfe6d8e",
+      "source_sha256": "2beac0be86d4aa0c834d82c1b7c53a60f6ed72bb6f36b69c7b059667e0ef5ef1"
+    },
+    {
+      "name": "v2-char-c1",
+      "run_id": "c64ee9b8574b41a59a11fd3acd24e6d9",
+      "experiment_id": "1",
+      "parameters": {
+        "name": "v2-char-c1",
+        "preprocessing": "v2",
+        "analyzer": "char_wb",
+        "ngram_min": 3,
+        "ngram_max": 5,
+        "c": 1.0,
+        "seed": 42,
+        "class_weight": "balanced",
+        "solver": "liblinear",
+        "min_df": 2,
+        "max_features": 100000,
+        "max_iter": 2000,
+        "sublinear_tf": true,
+        "threshold": 0.5,
+        "raw_sha256": "25e75c5b98b82bff4c4f987f452c7eea9735b83744b43bbd31187c3fc792e18b",
+        "data_sha256": "f9b017db1fd4ee7f6dab28330b5cc9ebe7c889f0cd3c7121286aa52b5135f4d1",
+        "split_sha256": "d58be4ac87d0925ab677f4f097808a9d957d6c520f488297f56f5471d860f10e"
+      },
+      "validation": {
+        "f1": 0.846421125781793,
+        "precision": 0.8423236514522822,
+        "recall": 0.8505586592178771,
+        "accuracy": 0.8956069910250354,
+        "average_precision": 0.9032269800575896,
+        "roc_auc": 0.9486829040709148
+      },
+      "fit_seconds": 1.9393262079684064,
+      "commit_sha": "5ef327277421fb855e3079ae10487e56dcfe6d8e",
+      "source_sha256": "2beac0be86d4aa0c834d82c1b7c53a60f6ed72bb6f36b69c7b059667e0ef5ef1"
+    },
+    {
+      "name": "v2-char-c10",
+      "run_id": "641c8553c981412d8255acb7f9fbb9f7",
+      "experiment_id": "1",
+      "parameters": {
+        "name": "v2-char-c10",
+        "preprocessing": "v2",
+        "analyzer": "char_wb",
+        "ngram_min": 3,
+        "ngram_max": 5,
+        "c": 10.0,
+        "seed": 42,
+        "class_weight": "balanced",
+        "solver": "liblinear",
+        "min_df": 2,
+        "max_features": 100000,
+        "max_iter": 2000,
+        "sublinear_tf": true,
+        "threshold": 0.5,
+        "raw_sha256": "25e75c5b98b82bff4c4f987f452c7eea9735b83744b43bbd31187c3fc792e18b",
+        "data_sha256": "f9b017db1fd4ee7f6dab28330b5cc9ebe7c889f0cd3c7121286aa52b5135f4d1",
+        "split_sha256": "d58be4ac87d0925ab677f4f097808a9d957d6c520f488297f56f5471d860f10e"
+      },
+      "validation": {
+        "f1": 0.8387553041018387,
+        "precision": 0.8495702005730659,
+        "recall": 0.8282122905027933,
+        "accuracy": 0.8923004251299008,
+        "average_precision": 0.9161889419339202,
+        "roc_auc": 0.9561346843236476
+      },
+      "fit_seconds": 2.008869333018083,
+      "commit_sha": "5ef327277421fb855e3079ae10487e56dcfe6d8e",
+      "source_sha256": "2beac0be86d4aa0c834d82c1b7c53a60f6ed72bb6f36b69c7b059667e0ef5ef1"
+    }
+  ],
+  "selected": {
+    "schema_version": 1,
+    "commit_sha": "5ef327277421fb855e3079ae10487e56dcfe6d8e",
+    "source_sha256": "2beac0be86d4aa0c834d82c1b7c53a60f6ed72bb6f36b69c7b059667e0ef5ef1",
+    "run_id": "e1311c58c52a498db9a2e91b2366527c",
+    "experiment_id": "1",
+    "experiment_name": "russian-toxic-comments",
+    "preprocessing": "v1",
+    "parameters": {
+      "name": "v1-char-c1",
+      "preprocessing": "v1",
+      "analyzer": "char_wb",
+      "ngram_min": 3,
+      "ngram_max": 5,
+      "c": 1.0,
+      "seed": 42,
+      "class_weight": "balanced",
+      "solver": "liblinear",
+      "min_df": 2,
+      "max_features": 100000,
+      "max_iter": 2000,
+      "sublinear_tf": true,
+      "threshold": 0.5,
+      "raw_sha256": "25e75c5b98b82bff4c4f987f452c7eea9735b83744b43bbd31187c3fc792e18b",
+      "data_sha256": "47f06680d8cac610abe925ba492e20377df0c6abd2f917fdd49306a96bb6c2eb",
+      "split_sha256": "d58be4ac87d0925ab677f4f097808a9d957d6c520f488297f56f5471d860f10e"
+    },
+    "min_chars": 15,
+    "validation": {
+      "f1": 0.8482328482328483,
+      "precision": 0.8418156808803301,
+      "recall": 0.8547486033519553,
+      "accuracy": 0.896551724137931,
+      "average_precision": 0.902977086485471,
+      "roc_auc": 0.9487477021600692
+    },
+    "test": {
+      "f1": 0.8549828178694158,
+      "precision": 0.8462585034013606,
+      "recall": 0.8638888888888889,
+      "accuracy": 0.9002835538752363,
+      "average_precision": 0.9140081154897683,
+      "roc_auc": 0.9533976042661573
+    },
+    "selection_rule": "maximum validation F1, then average precision, then config order",
+    "threshold": 0.5,
+    "data_manifest": {
+      "source": "https://www.kaggle.com/datasets/blackmoon/russian-language-toxic-comments",
+      "raw_sha256": "25e75c5b98b82bff4c4f987f452c7eea9735b83744b43bbd31187c3fc792e18b",
+      "raw_rows": 14412,
+      "after_length": 14412,
+      "conflict_rows": 86,
+      "clean_rows": 14112,
+      "positive_rows": 4700,
+      "split_sha256": "d58be4ac87d0925ab677f4f097808a9d957d6c520f488297f56f5471d860f10e",
+      "versions": {
+        "v1": {
+          "sha256": "47f06680d8cac610abe925ba492e20377df0c6abd2f917fdd49306a96bb6c2eb",
+          "rows": 14112
+        },
+        "v2": {
+          "sha256": "f9b017db1fd4ee7f6dab28330b5cc9ebe7c889f0cd3c7121286aa52b5135f4d1",
+          "rows": 14112
+        }
+      },
+      "splits": {
+        "test": {
+          "size": 2116,
+          "sum": 720,
+          "mean": 0.34026465028355385
+        },
+        "train": {
+          "size": 9879,
+          "sum": 3264,
+          "mean": 0.330397813543881
+        },
+        "validation": {
+          "size": 2117,
+          "sum": 716,
+          "mean": 0.3382144544166273
+        }
+      },
+      "protocol": {
+        "seed": 42,
+        "min_chars": 15,
+        "split_folds": 20,
+        "test_folds": 3,
+        "validation_folds": 3,
+        "near_threshold": 0.95,
+        "near_min_chars": 40
+      }
+    },
+    "packages": {
+      "numpy": "2.2.6",
+      "scipy": "1.15.3",
+      "scikit-learn": "1.7.2",
+      "joblib": "1.5.2",
+      "toxic-mlops": "1.0.0"
+    },
+    "model_sha256": "980a2716ff90e0a46c198ea9462a3730575330dca6282eb1f277685e82d96404",
+    "model_version": "sha256:980a2716ff90e0a46c198ea9462a3730575330dca6282eb1f277685e82d96404"
+  },
+  "test_rows": 2116,
+  "model_bytes": 1653411,
+  "metadata_sha256": "f5d1f0d9e81f47b1458738a0af7c4ca02269a09f19eb46ca7b9591a8d64da884"
+}

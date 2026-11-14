@@ -1,0 +1,71 @@
+name: quality-and-container
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+# Feature branches use PR events only: no duplicate push/PR runs.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.11.9'
+          python-version: '3.12'
+          enable-cache: true
+      - run: uv sync --frozen --extra train --extra ui
+      - run: uv run --no-sync ruff check .
+      - run: uv run --no-sync ruff format --check .
+      - name: Tests with coverage threshold
+        run: uv run --no-sync pytest --cov --cov-report=xml --cov-report=term-missing --junitxml=junit.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tests-${{ github.sha }}
+          path: |
+            junit.xml
+            coverage.xml
+          if-no-files-found: error
+
+  container:
+    needs: quality
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.11.9'
+          python-version: '3.12'
+      - run: uv sync --frozen --no-dev
+      - name: Download the pinned real model
+        run: uv run --no-sync toxic-mlops fetch-model
+      - name: Build a commit-addressed image
+        run: docker build --tag toxic-comments:${{ github.sha }} .
+      - name: Container smoke test
+        shell: bash
+        run: |
+          set -euo pipefail
+          container=$(docker run --detach --read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges --publish 127.0.0.1:8000:8000 toxic-comments:${{ github.sha }})
+          trap 'docker logs "$container"; docker rm --force "$container"' EXIT
+          python scripts/smoke.py | tee smoke.json
+          test "$(docker inspect --format '{{.Config.User}}' "$container")" = '10001:10001'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: smoke-${{ github.sha }}
+          path: smoke.json
+

@@ -1,0 +1,79 @@
+[data]
+path = "data/raw/labeled.csv"
+prepared_dir = "data/prepared"
+source_url = "https://www.kaggle.com/datasets/blackmoon/russian-language-toxic-comments"
+download_url = "https://www.kaggle.com/api/v1/datasets/download/blackmoon/russian-language-toxic-comments?datasetVersionNumber=1"
+sha256 = "25e75c5b98b82bff4c4f987f452c7eea9735b83744b43bbd31187c3fc792e18b"
+
+[train]
+seed = 42
+min_chars = 15
+split_folds = 20
+test_folds = 3
+validation_folds = 3
+near_duplicate_threshold = 0.95
+near_duplicate_min_chars = 40
+max_features = 100000
+min_df = 2
+max_iter = 2000
+experiment_name = "russian-toxic-comments"
+tracking_uri = "sqlite:///artifacts/mlflow.db"
+tracking_artifacts = "artifacts/mlflow-artifacts"
+output_dir = "artifacts/model"
+report_dir = "reports"
+
+[[train.experiments]]
+name = "v1-word-c1"
+preprocessing = "v1"
+analyzer = "word"
+ngram_min = 1
+ngram_max = 2
+c = 1.0
+
+[[train.experiments]]
+name = "v1-char-c1"
+preprocessing = "v1"
+analyzer = "char_wb"
+ngram_min = 3
+ngram_max = 5
+c = 1.0
+
+[[train.experiments]]
+name = "v1-char-c10"
+preprocessing = "v1"
+analyzer = "char_wb"
+ngram_min = 3
+ngram_max = 5
+c = 10.0
+
+[[train.experiments]]
+name = "v2-word-c1"
+preprocessing = "v2"
+analyzer = "word"
+ngram_min = 1
+ngram_max = 2
+c = 1.0
+
+[[train.experiments]]
+name = "v2-char-c1"
+preprocessing = "v2"
+analyzer = "char_wb"
+ngram_min = 3
+ngram_max = 5
+c = 1.0
+
+[[train.experiments]]
+name = "v2-char-c10"
+preprocessing = "v2"
+analyzer = "char_wb"
+ngram_min = 3
+ngram_max = 5
+c = 10.0
+
+[inference]
+model_dir = "artifacts/model"
+min_chars = 15
+max_chars = 10000
+host = "0.0.0.0"
+port = 8000
+api_url = "http://127.0.0.1:8000"
