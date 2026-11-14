@@ -17,3 +17,20 @@
 8. Остановите контейнер: `docker compose down`.
 
 Видео прикладывается к GitHub Release. Скриншоты и этот сценарий не заменяют видео.
+
+## Воспроизводимая визуализация реальных команд
+
+В комплект сдачи включён MP4 на 90 секунд, созданный из фактически выполненных
+команд финального commit. Это показ терминальных команд/ответов, не захват рабочего
+стола и не запись UI. Полный stdout/stderr и exit codes приложены как session.json.
+
+На macOS после установки окружения и получения модели:
+
+```bash
+uv run --no-sync python scripts/capture_demo.py
+swift scripts/encode_demo.swift dist/demo dist/demo.mp4
+```
+
+Нужны Apple Command Line Tools (Swift), Python extras ui (Pillow) и Docker.
+Временный контейнер использует localhost:8001 и удаляется после записи.
+Запись не подставляет ожидаемые ответы вместо реального inference.

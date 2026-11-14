@@ -1,0 +1,7 @@
+{
+  "successful_prediction": {
+    "label": "Нетоксичный",
+    "version": "Версия модели: sha256:980a2716ff90e0a46c198ea9462a3730575330dca6282eb1f277685e82d96404"
+  },
+  "invalid_input": "API HTTP 422: {\"detail\":[{\"type\":\"string_too_short\",\"loc\":[\"body\",\"text\"],\"msg\":\"String should have at least 1 character\",\"input\":\"\",\"ctx\":{\"min_length\":1}}]}"
+}
