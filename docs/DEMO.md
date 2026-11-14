@@ -32,5 +32,7 @@ swift scripts/encode_demo.swift dist/demo dist/demo.mp4
 ```
 
 Нужны Apple Command Line Tools (Swift), Python extras ui (Pillow) и Docker.
+Окружение восстанавливается через `uv sync --frozen --all-extras --no-editable`.
+На Mac перед командами добавьте Docker CLI в PATH, если требуется (см. README).
 Временный контейнер использует localhost:8001 и удаляется после записи.
 Запись не подставляет ожидаемые ответы вместо реального inference.

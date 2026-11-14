@@ -27,7 +27,7 @@ jobs:
           version: '0.11.9'
           python-version: '3.12'
           enable-cache: true
-      - run: uv sync --frozen --extra train --extra ui
+      - run: uv sync --frozen --extra train --extra ui --no-editable
       - run: uv run --no-sync ruff check .
       - run: uv run --no-sync ruff format --check .
       - name: Tests with coverage threshold
@@ -51,7 +51,7 @@ jobs:
         with:
           version: '0.11.9'
           python-version: '3.12'
-      - run: uv sync --frozen --no-dev
+      - run: uv sync --frozen --no-dev --no-editable
       - name: Download the pinned real model
         run: uv run --no-sync toxic-mlops fetch-model
       - name: Build a commit-addressed image
@@ -62,10 +62,14 @@ jobs:
           set -euo pipefail
           container=$(docker run --detach --read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges --publish 127.0.0.1:8000:8000 toxic-comments:${{ github.sha }})
           trap 'docker logs "$container"; docker rm --force "$container"' EXIT
-          python scripts/smoke.py | tee smoke.json
+          uv run --no-sync python scripts/smoke.py --app-version 1.0.1 | tee smoke.json
+          uv sync --frozen --extra ui --no-dev --no-editable
+          uv run --no-sync python scripts/check_ui.py > ui-check.json
           test "$(docker inspect --format '{{.Config.User}}' "$container")" = '10001:10001'
       - uses: actions/upload-artifact@v4
         with:
           name: smoke-${{ github.sha }}
-          path: smoke.json
+          path: |
+            smoke.json
+            ui-check.json
 

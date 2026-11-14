@@ -15,15 +15,15 @@
 | Документация | README, MODEL_CARD, DATASET_CARD, Mermaid | Файлы репозитория |
 | Доп. CI | lint/format/tests/coverage + Docker build/smoke | Успешный GitHub Actions |
 | Доп. UI | Streamlit → HTTP API, ошибки и model version | Код client/UI и интеграционная проверка |
-| Демо | 90-секундный показ фактических команд и ответов | Финальный Release v1.0.0: demo.mp4 + session.json |
+| Демо | 90-секундный показ фактических команд и ответов | Финальный Release v1.0.1: demo.mp4 + session.json |
 
 ## Идентификаторы сдачи
 
 Репозиторий: https://github.com/wwhalexx/mlops_cw.
 
-- Итоговый tag: **v1.0.0**; [дерево сдаваемой версии](https://github.com/wwhalexx/mlops_cw/tree/v1.0.0).
-- Полный итоговый commit SHA указан в [описании Release](https://github.com/wwhalexx/mlops_cw/releases/tag/v1.0.0).
-  Локальная проверка: `git rev-parse v1.0.0^{commit}`. SHA не вставляется в собственный
+- Итоговый tag: **v1.0.1**; [дерево сдаваемой версии](https://github.com/wwhalexx/mlops_cw/tree/v1.0.1).
+- Полный итоговый commit SHA указан в [описании Release](https://github.com/wwhalexx/mlops_cw/releases/tag/v1.0.1).
+  Локальная проверка: `git rev-parse v1.0.1^{commit}`. SHA не вставляется в собственный
   commit рекурсивно; Release и annotated tag связывают идентификаторы.
 - Training commit: `5ef327277421fb855e3079ae10487e56dcfe6d8e`.
 - [Шесть экспериментов и original run IDs](reports/EXPERIMENTS.md),
@@ -31,17 +31,18 @@
 - [Версии preprocessing v1/v2 и checksum](https://github.com/wwhalexx/mlops_cw/releases/download/model-v1/data-manifest.json).
 - [Итоговый model artifact](https://github.com/wwhalexx/mlops_cw/releases/download/model-v1/model-bundle.zip),
   [контрольные суммы](release_manifest.json).
-- [Демо MP4](https://github.com/wwhalexx/mlops_cw/releases/download/v1.0.0/demo.mp4),
-  [исходная запись команд и выводов](https://github.com/wwhalexx/mlops_cw/releases/download/v1.0.0/session.json).
+- [Демо MP4](https://github.com/wwhalexx/mlops_cw/releases/download/v1.0.1/demo.mp4),
+  [исходная запись команд и выводов](https://github.com/wwhalexx/mlops_cw/releases/download/v1.0.1/session.json).
 
 Видеодемо — визуализация фактически выполненных команд, а не запись рабочего стола.
 Выводы не подменяются; полный session.json содержит время, команды, exit codes,
 commit и stdout/stderr. Скрипты capture_demo.py/encode_demo.swift находятся в Git.
 Ручной сценарий записи рабочего стола дополнительно приведён в docs/DEMO.md.
 
-## Фактические проверки
+## Первичная проверка исследования (v1.0.0)
 
-Проверено 14.11.2026. Машиночитаемое подтверждение — [verification.json](reports/verification.json).
+Модель и эксперименты перенесены без изменений из v1.0.0. Проверено 14.11.2026.
+Машиночитаемое подтверждение первичного исследования — [verification.json](reports/verification.json).
 
 1. На macOS arm64 / Python 3.12.14: **31 тест**, 0 failures, покрытие **97.86%**
    при требуемом пороге 80%. Lint и format check прошли.
@@ -65,6 +66,22 @@ commit и stdout/stderr. Скрипты capture_demo.py/encode_demo.swift нах
 8. Проверены игнорирование data/models/env и конкретные форматы секретов в исходниках.
    Это автоматическая проверка известных шаблонов, а не доказательство отсутствия
    любых возможных секретов. Внешние credentials проекту локально не нужны.
+
+## Проверка исправлений v1.0.1
+
+Новая версия исправляет установку пакета и интерфейс; исходный tag v1.0.0 сохранён.
+Контрольная сумма модели не изменяется: исправления не затрагивают подготовку
+обучающих данных, признаки и классификатор.
+
+- Установка: `uv sync --frozen --all-extras --no-editable`.
+- Проверяются пустой ввод, пробелы, HTML, фраза «что такое?», границы длины,
+  HTTP 422/429/5xx, недоступность API, таймаут и некорректный ответ.
+- AppTest проверяет, что неверный ввод не отправляется в API, а ошибка не оставляет
+  на экране предыдущий результат. CI также запускает страницу против Docker API.
+- Фактические результаты проверки новой версии: [release-verification.json](reports/release-verification.json).
+- Успешные запуски CI для PR/main/tag: [GitHub Actions](https://github.com/wwhalexx/mlops_cw/actions).
+- Демо в Release v1.0.1 записывается для нового итогового commit; история и
+  доказательства v1.0.0 остаются в прежнем Release.
 
 ## Результаты и выводы
 

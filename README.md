@@ -24,13 +24,27 @@ Logistic Regression. Обоснования: [архитектура](docs/ARCHI
 ```bash
 git clone https://github.com/wwhalexx/mlops_cw.git
 cd mlops_cw
-git checkout v1.0.0
-uv sync --frozen --all-extras
+git checkout v1.0.1
+uv sync --frozen --all-extras --no-editable
 ```
 
 `uv` создаёт `.venv` и при необходимости получает Python 3.12. Установка отдельных
 пакетов вручную не нужна. Далее `--no-sync` использует уже восстановленное окружение.
-Для одного API достаточно `uv sync --frozen --no-dev`.
+Флаг `--no-editable` устанавливает пакет непосредственно в `.venv`, без зависимости
+от editable-путей. Используйте его при каждом повторном `uv sync`. После изменения
+Python-кода повторите эту команду: обычная установка не подхватывает изменения сама.
+Для одного API достаточно `uv sync --frozen --no-dev --no-editable`.
+
+На Mac откройте Docker Desktop и дождитесь готовности Engine. Если команда `docker`
+не найдена, добавьте CLI в PATH **в каждом новом терминале**, где нужны Docker-команды:
+
+```bash
+export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
+docker version
+```
+
+Вывод должен содержать Client и Server. Ошибка подключения к Server означает, что
+Engine ещё не готов. Не продолжайте запуск Docker, пока эта проверка не проходит.
 
 ## Быстро запустить итоговую модель
 
@@ -38,6 +52,9 @@ uv sync --frozen --all-extras
 uv run --no-sync toxic-mlops fetch-model
 uv run --no-sync toxic-mlops serve
 ```
+
+Это локальный запуск API без контейнера. Остановите его через Ctrl+C перед запуском
+Docker на том же порту 8000. Одновременно запускайте один API: локальный или Docker.
 
 Модель скачивается из GitHub Release по `release_manifest.json`: проверяются хеш
 ZIP, состав архива, хеш модели и её версия. Архив содержит sklearn Pipeline,
@@ -130,14 +147,17 @@ uv run --no-sync pytest --cov --cov-report=term-missing --cov-report=xml --junit
 дедупликация, split, checksum, реальные локальные MLflow runs на синтетической
 малой выборке и упаковка/восстановление artifact. Для этих тестов не нужны сеть,
 Docker, внешний tracking или настоящий CSV. UI-файл исключён из coverage;
-его HTTP-клиент тестируется отдельно, работа с реальным API проверяется интеграционно.
+его логика дополнительно проверяется через Streamlit AppTest: неверный ввод не
+вызывает HTTP, корректный ответ отображается, ошибка убирает предыдущий результат.
+HTTP-клиент проверяет схему успешного ответа и переводит ошибки на русский язык.
+Работа страницы с реальным API проверяется интеграционно.
 
 ## Docker
 
 ```bash
-uv run --no-sync toxic-mlops fetch-model
-docker compose up --build -d
-uv run --no-sync python scripts/smoke.py
+uv run --no-sync toxic-mlops fetch-model && \
+  docker compose up --build -d && \
+  uv run --no-sync python scripts/smoke.py
 docker compose down
 ```
 
@@ -155,20 +175,39 @@ Python и uv images закреплены версиями и digest. Устан�
 Docker context ограничен allowlist `.dockerignore`; `.env`, CSV и tracking не
 копируются. `/health`, `/predict`, ошибочный запрос и `/docs` проверяются smoke-скриптом.
 
-Если Docker установлен на Mac без CLI в PATH:
-`export PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"`.
+Сначала должна успешно завершиться команда сборки и запуска. Smoke использует
+`&&`, чтобы ошибка Docker не маскировалась ответом ранее запущенного сервиса.
+Если порт 8000 занят, остановите прежний API; `docker compose down` останавливает
+контейнеры этого Compose-проекта, а локальный API останавливается через Ctrl+C.
 
 ## Интерфейс — дополнительный компонент
 
 При работающем API или контейнере:
 
 ```bash
-uv run --no-sync streamlit run src/toxic_mlops/ui.py --server.address 127.0.0.1
+uv run --no-sync python -m streamlit run src/toxic_mlops/ui.py \
+  --server.address 127.0.0.1 --server.port 8501
 ```
 
 Откройте http://127.0.0.1:8501. Интерфейс отправляет HTTP-запрос в документированный
-API, показывает метку, score и версию модели; ошибки сервиса отображаются на странице.
+API, показывает метку, score и версию модели. Под полем указаны ограничения длины;
+пустой/короткий текст проверяется после той же очистки, что в API. Пользователь
+видит русскую подсказку вместо JSON, traceback или внутренних подробностей сервиса.
 В UI нет второй модели. Адрес API изменяется через `TOXIC_API_URL`.
+
+Если порт 8501 уже занят, остановите старый Streamlit через Ctrl+C или явно
+используйте `--server.port 8502`, затем откройте http://127.0.0.1:8502.
+
+Проверка страницы с уже работающим API:
+
+```bash
+uv run --no-sync python scripts/check_ui.py
+```
+
+При `ModuleNotFoundError: toxic_mlops` остановите Streamlit, выполните из корня
+репозитория `uv sync --frozen --all-extras --no-editable`, затем повторите запуск
+через `uv run --no-sync python -m streamlit`. Не используйте отдельный глобальный
+`streamlit` из другого Python-окружения.
 
 ## Конфигурация и секреты
 
@@ -193,7 +232,7 @@ CD не заявляется: сервис не разворачивается �
 ## Структура
 
 ```text
-src/toxic_mlops/  config, data, preprocessing, train, model, API, client, UI, CLI, release
+src/toxic_mlops/  config, data, preprocessing, train, model, API, schemas, client, UI, CLI, release
 tests/           автономные unit/integration тесты
 scripts/         smoke и сценарий демо
 reports/         фактические результаты экспериментов и проверки
@@ -209,3 +248,8 @@ data/, artifacts/, .venv/  локальные файлы, вне Git
 
 Фактические результаты проверок, tag/commit, ссылки и оставшиеся ограничения:
 [REPORT.md](REPORT.md). Сценарий 1–3-минутного демо: [docs/DEMO.md](docs/DEMO.md).
+
+Версия **v1.0.1** исправляет установку и сообщения интерфейса. Модель и метрики
+экспериментов сохранены из v1.0.0: model artifact имеет прежний SHA-256, а
+`/openapi.json` сообщает версию приложения 1.0.1. Версии приложения и модели —
+разные идентификаторы. Старый tag v1.0.0 остаётся доступным.
