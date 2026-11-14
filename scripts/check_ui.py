@@ -10,14 +10,25 @@ app.text_area[0].input("Спасибо за помощь и подробное �
 app.button[0].click().run()
 assert not app.exception and len(app.subheader) == 1
 assert any("sha256:" in caption.value for caption in app.caption)
-success = {"label": app.subheader[0].value, "version": app.caption[0].value}
+success = {
+    "label": app.subheader[0].value,
+    "version": next(c.value for c in app.caption if c.value.startswith("Версия модели:")),
+}
+app.text_area[0].input("что такое?")
+app.button[0].click().run()
+assert not app.exception and "Сейчас — 10" in app.error[0].value
+short_error = app.error[0].value
 app.text_area[0].input("")
 app.button[0].click().run()
 assert not app.exception and len(app.error) == 1
-assert "422" in app.error[0].value
+assert "Введите комментарий" in app.error[0].value
 print(
     json.dumps(
-        {"successful_prediction": success, "invalid_input": app.error[0].value},
+        {
+            "successful_prediction": success,
+            "short_input": short_error,
+            "invalid_input": app.error[0].value,
+        },
         ensure_ascii=False,
         indent=2,
     )

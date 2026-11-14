@@ -5,9 +5,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel, ConfigDict, Field
 
+from toxic_mlops import __version__
 from toxic_mlops.config import Settings, load_settings
 from toxic_mlops.model import load_model
 from toxic_mlops.preprocessing import clean_text
+from toxic_mlops.schemas import PredictResponse
 
 
 class PredictRequest(BaseModel):
@@ -17,15 +19,6 @@ class PredictRequest(BaseModel):
         max_length=10000,
         examples=["Спасибо за подробное объяснение, теперь всё понятно!"],
     )
-
-
-class PredictResponse(BaseModel):
-    label: int = Field(ge=0, le=1)
-    label_name: str
-    score: float = Field(ge=0, le=1)
-    threshold: float
-    model_version: str
-    preprocessing_version: str
 
 
 class HealthResponse(BaseModel):
@@ -49,7 +42,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     app = FastAPI(
         title="Russian toxic comments API",
-        version="1.0.0",
+        version=__version__,
         lifespan=lifespan,
         description="Binary classification; score is an uncalibrated model probability.",
     )
